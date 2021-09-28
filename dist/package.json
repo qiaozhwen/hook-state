@@ -12,7 +12,7 @@
     "url": "git+https://github.com/qiaozhwen/hook-state.git"
   },
   "module": "dist/index.js",
-  "author": "",
+  "author": "qiaozhen",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/qiaozhwen/hook-state/issues"
