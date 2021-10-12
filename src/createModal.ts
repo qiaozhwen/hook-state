@@ -1,12 +1,21 @@
 import {useState, useEffect} from 'react'
-export const createContainer = (initState)=>{
+type initStateType = {
+  [index: string]: any
+}
+type listenerType = {
+  [index: string]: any
+}
+interface setGlobalState<T> {
+  (key: string) : [initStateType, any];
+}
+export function createContainer<T>(initState: initStateType){
     let globalState = initState
-    const listeners:any = Object.keys(initState).map(key=>{
+    const listeners:listenerType = Object.keys(initState).map(key=>{
         let a = {}
         a[key] = new Set()
         return a
     })
-    const setGlobalState = (key, nextValue) => {
+    const setGlobalState = <T> (key, nextValue) => {
         if(typeof nextValue==='function'){
             globalState = { ...globalState, [key]: nextValue(globalState[key]) };
         }else{
@@ -16,7 +25,7 @@ export const createContainer = (initState)=>{
             listener()
         }
     }
-    const useSetGlobalState = (key)=> {
+    const useSetGlobalState:setGlobalState<T> = (key)=> {
         const [state, setState] = useState<any>(globalState[key])
         useEffect(() => {
             const listener = () => {
