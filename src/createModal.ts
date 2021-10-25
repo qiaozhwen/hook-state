@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, Component} from 'react'
 type initStateType = {
   [index: string]: any
 }
@@ -37,7 +37,22 @@ export function createContainer<T>(initState: initStateType){
         }, []);
         return [state, (newValue)=>setGlobalState(key, newValue)]
     }
-    return {
+
+      function releaseState (WrapComponent: any){
+          class ReturnComponent extends Component{
+            constructor(props) {
+              super(props);
+            }
+            render(){
+              return(
+                <WrapComponent {...this.props} {...globalState}/>
+              )
+            }
+          }
+      return ReturnComponent
+    }
+  export {releaseState }
+  return {
         setGlobalState,
         useSetGlobalState
     }
