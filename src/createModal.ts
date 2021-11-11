@@ -10,7 +10,7 @@ type listenerType = {
 interface setGlobalState<T> {
   (key: string): [initStateType, any];
 }
-export function createContainer<T>(initState: initStateType) {
+export function createDateSource<T>(initState: initStateType) {
   let globalState = initState
   const listeners: listenerType = Object.fromEntries(Object.entries(initState).map(([key, value])=>[key, new Set([])]))
   const setGlobalState = <T>(key:any, nextValue:any) => {
@@ -37,6 +37,7 @@ export function createContainer<T>(initState: initStateType) {
       setGlobalState(key, newValue);
     }]
   }
+  // todo later use hoc to give state😊
   const releaseState = (WrapComponent: any) => {
     class ReturnComponent extends React.Component<any, any> {
       constructor(props:any) {
@@ -63,6 +64,6 @@ export function createContainer<T>(initState: initStateType) {
   return {
     setGlobalState,
     useSetGlobalState,
-    releaseState
+    // releaseState
   }
 }
