@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Component} from 'react'
-
+import dataSource from './datasource'
 type initStateType = {
   [index: string]: any
 }
@@ -10,9 +10,10 @@ type listenerType = {
 interface setGlobalState<T> {
   (key: string): [initStateType, any];
 }
-export function createDateSource<T>(initState: initStateType) {
-  let globalState = initState
-  const listeners: listenerType = Object.fromEntries(Object.entries(initState).map(([key, value])=>[key, new Set([])]))
+export function createDataSource<T>(initState: initStateType) {
+  let dataSourceInit = new dataSource(initState)
+  let globalState = dataSourceInit.data
+  let listeners = dataSourceInit.listeners
   const setGlobalState = <T>(key:any, nextValue:any) => {
     if (typeof nextValue === 'function') {
       globalState = {...globalState, [key]: nextValue(globalState[key])};
@@ -38,31 +39,30 @@ export function createDateSource<T>(initState: initStateType) {
     }]
   }
   // todo later use hoc to give state😊
-  const releaseState = (WrapComponent: any) => {
-    class ReturnComponent extends React.Component<any, any> {
-      constructor(props:any) {
-        super(props);
-      }
-      changeLocalState (data:any) {
-        // change global state
-        const {key, value} = data
-        globalState[key] = value;
-        for (let listener of listeners[key]) {
-          listener()
-        }
-        this.render();
-      }
-      render() {
-        const newProps = {...this.props, ...globalState, changeLocalState:this.changeLocalState}
-        console.log('22222', React.cloneElement(WrapComponent, {...newProps}))
-        // combine with hook state
-        return React.cloneElement(WrapComponent, {...newProps})
-      }
-    }
-    return ReturnComponent
-  }
+  // const releaseState = (WrapComponent: any) => {
+  //   class ReturnComponent extends React.Component<any, any> {
+  //     constructor(props:any) {
+  //       super(props);
+  //     }
+  //     changeLocalState (data:any) {
+  //       // change global state
+  //       const {key, value} = data
+  //       globalState[key] = value;
+  //       for (let listener of listeners[key]) {
+  //         listener()
+  //       }
+  //       this.render();
+  //     }
+  //     render() {
+  //       const newProps = {...this.props, ...globalState, changeLocalState:this.changeLocalState}
+  //       // combine with hook state
+  //       return React.cloneElement(WrapComponent, {...newProps})
+  //     }
+  //   }
+  //   return ReturnComponent
+  // }
   return {
-    setGlobalState,
+    // setGlobalState,
     useSetGlobalState,
     // releaseState
   }
