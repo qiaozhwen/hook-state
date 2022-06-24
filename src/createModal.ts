@@ -62,7 +62,7 @@ export function createDataSource<T>(initState: initStateType) {
   //   return ReturnComponent
   // }
   return {
-    // setGlobalState,
+    setGlobalState,
     useSetGlobalState,
     // releaseState
   }
