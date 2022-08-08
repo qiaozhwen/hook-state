@@ -38,7 +38,7 @@ export function createDataSource<T>(initState: initStateType) {
       setGlobalState(key, newValue);
     }]
   }
-  // todo later use hoc to give state😊
+  // todo later use hoc to give state
   // const releaseState = (WrapComponent: any) => {
   //   class ReturnComponent extends React.Component<any, any> {
   //     constructor(props:any) {
